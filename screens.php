@@ -1,13 +1,13 @@
 <?php
-	include('session.php');
-	include('init.php');
+	//include('session.php');
+	//include('init.php');
 
 	$current = 'screens';
 
-	$page = $_GET['page'];
+	//$page = $_GET['page'];
 	
-	$search = mysql_real_escape_string($_GET['search']);
-	$from = mysql_real_escape_string($_GET['from']);
+	$search = mysqli_real_escape_string($_GET['search']);
+	$from = mysqli_real_escape_string($_GET['from']);
 	
 	$str = preg_replace("/page=[0-9]+/",'',$_SERVER['QUERY_STRING']);
 	
@@ -24,8 +24,8 @@
 	else{
 		$sql = "select count(*) from screens";
 	}
-	$myrs = mysql_query($sql);
-    if($row = mysql_fetch_array($myrs)) {
+	$myrs = mysqli_query($sql);
+    if($row = mysqli_fetch_array($myrs)) {
 		$total = $row[0];
 	}
 	if($page == 'showall'){
@@ -161,8 +161,8 @@ TEMPROW;
 		$sql = "select * from screens limit $start,$psize";
 	}
 	$n = $start;
-	$myrs = mysql_query($sql, $dbcon);
-	while($row = mysql_fetch_array($myrs)){
+	$myrs = mysqli_query($dbcon, $sql);
+	while($row = mysqli_fetch_array($myrs)){
 		$n++;
 		$newrow = $temprow;
 

@@ -7,6 +7,7 @@ include('dbinc.php');
 
 	include('header.php');
         
+        
 ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> <!--position-->
 <script type="text/javascript" src="bootstrap/js/jquery.js"></script><!--for confirm.-->
@@ -143,7 +144,7 @@ $(document).ready(function(){
 
                 </section><!-- /.content -->
              </div><!-- ./wrapper -->
-            <form name="form1" method="post" >  
+            <form name="form1" method="POST" enctype="multipart/form-data" >  
                <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -155,21 +156,27 @@ $(document).ready(function(){
                     <h4 class="modal-title" id="myModalLabel">Input Form</h4>
                 </div>
                 <div class="modal-body">
-                    Wall Name:  <input type="textbox" id="textbox1" name="wallText"><br>
-                    X-Position: <input type="textbox" id="textbox2" disabled/><br>
-                    Y-Position: <input type="textbox" id="textbox3" disabled/><br>
+                    Wall Name:  <input type="text" id="textbox1" name="wallText"><br>
+                    X-Position: <input type="text" id="textbox2" disabled/><br>
+                    Y-Position: <input type="text" id="textbox3" disabled/><br>
 
                     
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="saveWall()">Save changes</button>
+                    <button type="button" name="wall" class="btn btn-primary" onclick="saveWall()">Save changes</button>
                 </div>
             </div>
             
         </div>
     </div>
-</form>             
+</form>  
+             
+             <form>
+                     Wall Name:  <input type="text" id="textbox1" name="wallText"><br>
+                    X-Position: <input type="text" id="textbox2" disabled/><br>
+                    Y-Position: <input type="text" id="textbox3" disabled/><br>
+             </form>
 <?php
 	include("footer.php");
 
@@ -179,7 +186,7 @@ $(document).ready(function(){
             //$('[data-toggle=confirmation]').confirmation('show');  
                     //$('[data-toggle=confirmation]').confirmation({ btnOkClass: 'btn btn-sm btn-success', btnCancelClass: 'btn btn-sm btn-danger'});
 
-                var coordinates = function(element) {
+    var coordinates = function(element) {
     element = $(element);
     var top = element.position().top;
     var left = element.position().left;
@@ -202,10 +209,10 @@ $('.screen').draggable({
 function saveWall(){
     
    <?php
-     if(isset($_POST['wallText'])){
-        $myname = $_POST['wallText'];}
+     if(isset($_POST["wall"])){
+        $myname = $_POST["wallText"];
   
-       $myname= mysqli_real_escape_string($myname);
+       $myname= mysqli_real_escape_string($dbcon,$myname);
    
     $sql = "INSERT INTO walls (name, width, height) VALUES ('$myname', 65, 49)";
 mysqli_query($dbcon,$sql); 
@@ -213,9 +220,9 @@ mysqli_query($dbcon,$sql);
     echo "Records inserted successfully.";
 } else{
     echo "ERROR: Could not able to execute $sql. " . mysqli_error($dbcon);
-}?>
+     }}?>
 
-           
+
         }
     
 

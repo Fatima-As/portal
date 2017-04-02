@@ -1,7 +1,7 @@
 <?php
   
-  include('session.php');
-  include('init.php');
+ // include('session.php');
+  //include('init.php');
   $current = 'screens';
   $page = $_GET['page'];
 
