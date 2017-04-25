@@ -9,6 +9,8 @@ include('dbinc.php');
         
         
 ?>
+
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> <!--position-->
 <script type="text/javascript" src="bootstrap/js/jquery.js"></script><!--for confirm.-->
 <script type="text/javascript" src="bootstrap/js/bootstrap-tooltip.js"></script><!--for confirm.-->
@@ -20,12 +22,16 @@ include('dbinc.php');
               
  
 <script>
-$(document).ready(function(){
-    $("button").click(function(){
-        var x = $("#screen1").position();
-        alert("Top position: " + x.top + " Left position: " + x.left);
-    });
-});
+//$(document).ready(function(){
+//    $("button").click(function(){
+//        var scrrenN = document.getElementsByName("screens");
+//        //alert(scrrenN[0].id);
+//        for (var i=0; i<scrrenN.length; i++){
+//        var x = $("#"+scrrenN[i].id).position();
+//       // alert(i +" Top position: " + x.top + " Left position: " + x.left);
+//    }
+//    });
+//});
 </script>
 <?php
 	include("menu.php");
@@ -37,6 +43,7 @@ $(document).ready(function(){
 		while($row = mysqli_fetch_assoc($myrs)){
 			$screens[] = (object) $row;
 		}
+        
 		return $screens;
 	}
 
@@ -118,28 +125,36 @@ $(document).ready(function(){
       <div id="devices" style="margin-left:20px; padding:0px; border:1px solid #ddd; background-color:#fff; width:200px; height:400px; float:left; position: relative;">
       <?php $screens = get_screens(); ?>
         <?php foreach($screens as $screen) : ?>
-        	<div class="screen" name="screens" id="screen<?php echo $screen->id; ?>" style="position: absolute; top: <?php echo $screen->Y; ?>px; left: <?php echo $screen->X; ?>px; border:1px solid #ddd; background-color:#fafaaa; width:<?php echo $screen->width * 2; ?>px; height:<?php echo $screen->height * 1.5; ?>px; ">
+        	<div class="screen" name="screens" id="screen<?php echo $screen->id; ?>" style="position: absolute; top:<?php echo $screen->Y; ?>px; left:<?php echo $screen->X; ?>px; border:1px solid #ddd; background-color:#fafaaa; width: <?php echo $screen->width * 2; ?>px; height: <?php echo $screen->height * 1.5; ?>px; ">
           	<?php echo $screen->name; ?><br />
             
                     <i class="fa fa-rotate-right rotate" data="#screen<?php echo $screen->id; ?>" style="cursor:pointer" onclick='javascript: rotate_screen("#screen<?php echo $screen->id; ?>");'></i>
                 </div><!--./screen-->
-               <input type="text" class="screenTop" name="screensTop" id="screenTop<?php echo $screen->id; ?>"/>
-                <input type="text" class="screenLeft" name="screensLeft" id="screenLeft<?php echo $screen->id; ?>"/>
+          
              <?php 
              endforeach; ?>   
-        
+      </div> <!--devices-->
     
                                  <div style="clear:both;"></div>
                                       </div><!--composer-->
                                 </div><!-- /.box-body -->
                                 <div class="box-footer">
                                     <form name="form01" method="POST" enctype="multipart/form-data" >  
+                                        <?php $screens = get_screens(); ?>
+        <?php
+        foreach($screens as $screen) : ?>
+                                        <input type="text" class="screenid" name="screensid[]" id="s<?php echo $screen->id; ?>" value="<?php echo $screen->id; ?>"/>
+                                        <input type="text" class="screenTop" name="screensTop[]" id="screenTop<?php echo $screen->id; ?>"/>
+                                        <input type="text" class="screenLeft" name="screensLeft[]" id="screenLeft<?php echo $screen->id; ?>"/>
+             <?php 
+            
+             endforeach; ?> 
                                      Wall Name:  <input type="text" id="textbox01" name="wallText"><br>   
-                                     <button type="submit" name="saveW" class="btn btn-primary" onclick="saveW()"><!--data-toggle="modal" data-target="#myModal"-->Save Wall</button>
-                                     <button  type="button" name="saveWw" class="btn btn-primary" onclick="saveWall()">Save Wall</button>
+                                     <input type="submit" value="submit" name="submit" onclick="sWall()"/>Save Wall
+<!--                                     <button  type="button" name="saveWw" class="btn btn-primary" onclick="saveWall()">Save Wall</button>-->
                                     <button>Return the top and left position of the p element</button>
                                     </form>
-                                </div>
+                                </div><!--footer -->
                                 
                             </div><!-- /.box -->
                             
@@ -156,44 +171,38 @@ $(document).ready(function(){
             
            
             <div class="modal-content">
-                <div class="modal-header">
+<!--                <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h4 class="modal-title" id="myModalLabel">Input Form</h4>
-                </div>
+                </div>-->
                 <div class="modal-body">
-                    Wall Name:  <input type="text" id="textbox1" name="wallText"><br>
+<!--                   // Wall Name:  <input type="text" id="textbox1" name="wallText"><br>-->
                     X-Position: <input type="text" id="textbox2" disabled/><br>
                     Y-Position: <input type="text" id="textbox3" disabled/><br>
 
                     
                 </div>
-                <div class="modal-footer">
+<!--                <div class="modal-footer">
                     <button type="submit" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="button" name="wall" class="btn btn-primary" onclick="saveWall()">Save changes</button>
-                </div>
+                </div>-->
             </div>
             
         </div>
     </div>
 </form>  
-             
-             <form>
+
+<!--             <form>
                      Wall Name:  <input type="text" id="textbox1" name="wallText"><br>
                     X-Position: <input type="text" id="textbox2" disabled/><br>
                     Y-Position: <input type="text" id="textbox3" disabled/><br>
-             </form>
+             </form>-->
 <?php
 	include("footer.php");
-
+        
+ 
 ?>
   <script>
-  function saveW(){
-  alert("save");
-    }
-  
-    
-            //$('[data-toggle=confirmation]').confirmation('show');  
-                    //$('[data-toggle=confirmation]').confirmation({ btnOkClass: 'btn btn-sm btn-success', btnCancelClass: 'btn btn-sm btn-danger'});
 
     var coordinates = function(element) {
     element = $(element);
@@ -213,69 +222,25 @@ $('.screen').draggable({
         coordinates('.screen');
     }
 });
-</script>
-<script>
-//function saveW(){
-    
-//    alert("saveW");
-//    var screens = Document.getElementsByTagName("screens");
-//
-//    for(var i=0; i< screens.length; i++){
-//        var top = screens.item(i).position().top;
-//        alert("top "+top);
-//        var left = screens.item(i).position().left;
-//        alert(left);
-//        var screenid = screens.item(i).id;
-//        alert(screenid);
-//        var topText = Document.getElementById("screenTop"+screenid);
-//        topText.value=top.toString();
-//    }
- //   <?php
-//     if(isset($_POST["saveW"])){
-//        $myname = $_POST["wallText"];
-//  
-//       $myname= mysqli_real_escape_string($dbcon,$myname);
-//    $sql = "INSERT INTO walls (name, width, height) VALUES ('$myname', 65, 49)";
-//mysqli_query($dbcon,$sql); 
-//        if(mysqli_query($dbcon, $sql)){
-//    echo "Records inserted successfully.";
-//} else{
-//    echo "ERROR: Could not able to execute $sql. " . mysqli_error($dbcon);
-//     }}
-//     $html = file_get_contents('wallcomposer.html');
-//    $dom = new DOMDocument();
-//    $dom->loadHTML($html);
-//     $screens = $dom ->document.getElementsByName("screens");
-//     
-//     foreach($screens as $screen){
-//         $screenId = $atrr->nodeId;
-//         $or;
-//         $x;
-//         $y;
-//     }
-//     
-     ?>
-             
+
+function  sWall(){
+   
+      var scrrenN = document.getElementsByName("screens");
+        //alert(scrrenN[0].id);
+       
+        for (var i=0; i<scrrenN.length; i++){
+        var x = $("#"+scrrenN[i].id).position();
+       // alert(i +" Top position: " + x.top + " Left position: " + x.left);
+        document.getElementById('screenTop'+scrrenN[i].id.toString().substring(6)).value=" "+x.left;
+        document.getElementById('screenLeft'+scrrenN[i].id.toString().substring(6)).value=" "+x.top;
+        
+    }
+        
+  
+
+
 }
 
-    function saveWall(){
-    alert("saveWall")
-   <?php
-     if(isset($_POST["wall"])){
-        $myname = $_POST["wallText"];
-  
-       $myname= mysqli_real_escape_string($dbcon,$myname);
-   
-    $sql = "INSERT INTO walls (name, width, height) VALUES ('$myname', 65, 49)";
-mysqli_query($dbcon,$sql); 
-        if(mysqli_query($dbcon, $sql)){
-    echo "Records inserted successfully.";
-} else{
-    echo "ERROR: Could not able to execute $sql. " . mysqli_error($dbcon);
-     }}?>
-
-
-        }
     
 
 		$(document).ready(function(){
@@ -304,6 +269,35 @@ mysqli_query($dbcon,$sql);
 	
   </script>
 
-  
+             <?php 
+ 
+  if(isset($_POST["submit"])){
+      
+       $ids = $_POST[screensid];
+       $tops = $_POST[screensTop];
+       $lefts = $_POST[screensLeft];
+        
+       for($i=0; $i<count($ids);$i++){
+           $sid = $ids[$i];
+           $stop = $tops[$i];
+           $sleft = $lefts[$i];
+        $sql = "UPDATE screens SET X=$sleft,Y=$stop WHERE id=$sid";
+         mysqli_query($dbcon,$sql); 
+       }
+       
+ //     if(isset($_POST["saveW"])){
+//        $myname = $_POST["wallText"];
+//  
+//       $myname= mysqli_real_escape_string($dbcon,$myname);
+//    $sql = "INSERT INTO walls (name, width, height) VALUES ('$myname', 65, 49)";
+//mysqli_query($dbcon,$sql); 
+//        if(mysqli_query($dbcon, $sql)){
+//    echo "Records inserted successfully.";
+//} else{
+//    echo "ERROR: Could not able to execute $sql. " . mysqli_error($dbcon);
+//     }}
 
-  
+}
+
+
+ ?>
